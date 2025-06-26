@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ 
+    <title>Chargement</title>
+    <link rel="icon" href="static/dophinicone.png" type="image/png">
+
+
+
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body background="static/photo/salle vide.jpg" >
+
+    <header>
+        <!-- En-tête de la page -->
+        <div class="entête">
+            <h1>Utilisateurs</h1>
+            <div class="user-info">
+                <p>Nom: {{ username }}</p> 
+                <p>Groupe: {{ groupe }}</p>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a class="text" href="{{ url_for('Home') }}">Accueil</a></li>
+            </ul>
+
+            <button class="déco" onclick="window.location.href='{{ url_for('déconnexion') }}'">Déconnexion</button>
+        </nav>
+        
+    </header>
+    <main class="container"> 
+        <div class="tableau">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Mot de passe</th>
+                        <th>Groupe</th>
+                        <th>Supprimer</th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for utilisateur in utilisateurs %}
+                    <tr>
+                        <td>{{ utilisateur.name }}</td>
+                        <td>*****</td>
+                        <td>{{ utilisateur._group }}</td>
+                        <td><img class="bouton-supprimer" src="static/photo/croix.png" data-id="{{ utilisateur.id_user }}" alt="Supprimer" ></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="black" id="ajouter-btn">Ajouter</button> <!-- Bouton d'envoi -->
+        </div>
+        
+                   
+
+        <div id="fenetre-ajouter-utilisateur" class="fenetreUtilisateur">
+            <form action="{{ url_for('charger_utilisateur') }}" method="POST" enctype="multipart/form-data" class="conteneurform" autocomplete="off">
+                <div class="form-labels">
+                    <label for="nom">Nom:</label>
+                    <label for="motpasse">Mot de passe:</label>
+                    <label for="groupe">Groupe:</label>
+                </div>
+
+                <div class="form-inputs">
+                    <input class="black" type="text" name="nom" required>
+                    <input class="black" type="text" name="motpasse"required>
+                    <select class="black" name="groupe" required>
+                        
+                        <option value="Admin">Admin</option>
+                        <option value="Admin">user</option>
+                        
+                    </select>
+                </div>
+                <button class="black" type="submit">Valider</button>
+
+
+            </form>
+            
+        </div>
+    </main>
+    
+
+    <!-- Section principale -->
+    
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+    
+
+    <script src="{{ url_for('static', filename='js/utilisateur.js') }}"></script>
+</body>
+</html>

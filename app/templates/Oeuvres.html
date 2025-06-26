@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+    
+        <meta charset ="utf 8">
+        <title>Oeuvres</title>
+        <link class="icon" rel="icon" href="static/photo/dauphin.png" type="image/png">
+        <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+        <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/oeuvre.css')}}">
+        <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    </head>
+<body background="static/photo/Bibliotheque.jpeg">
+
+    <header>
+        <!-- En-tête de la page -->
+        <div class="entête">
+            <h1>Oeuvres</h1>
+            <div class="user-info">
+                <p>Nom: {{ username }}</p> 
+                <p>Groupe: {{ groupe }}</p>
+            </div>
+         </div>
+    
+        
+
+        <nav>
+            <ul>
+                <li><a class="text" href="{{ url_for('Home') }}">Accueil</a></li>
+                <li><a class="text" href="{{ url_for('personnages') }}">Personnages</a></li>
+                
+            </ul>
+            <button class="déco" onclick="window.location.href='{{ url_for('déconnexion') }}'">Déconnexion</button>
+        </nav>
+        
+        
+    </header>
+
+    <!-- Section principale -->
+     
+    <main class="container">
+        {% for item in items %}
+                    
+            <!-- J'affiche les image de livre de chaque auteurs contenus dans la table Authors. La correspondance se fait via la clé étrangère -->
+            <figure class="figure-oeuvre">
+
+                <div class="dropdown">
+                    <!-- Input checkbox caché pour chaque menu -->
+                    <input type="checkbox" id="menu-toggle-{{ loop.index }}" class="menu-toggle" />
+                
+                    <!-- Label lié au checkbox, clic sur l'image pour ouvrir/fermer -->
+                    <label for="menu-toggle-{{ loop.index }}">
+                        <img class="icon" src="{{ url_for('static', filename='photo/bandes.png') }}" alt="Menu">
+                    </label>
+                
+                    <!-- Menu déroulant -->
+                    <ul class="dropdown-menu">
+                        {% if session['groupe'] == 'Admin' %}
+                        <li><a href="#">Modifier</a></li>
+                        {% endif %}
+                        <li><a href="#" class="ouvrir-fenetre-commentaire" data-id="{{ item.id_author }}">Commenter</a></li>
+                    </ul>
+                </div>
+                <!-- Fenêtre modale pour le commentaire (cachée par défaut) -->
+                <div id="fenetre-commentaire-{{ item.id_author }}" class="fenetre-modale">
+                    <form id="formulaire-commentaire" action="{{ url_for('charger_commentaire_bio', id=item.id_author) }}" method="POST" enctype="multipart/form-data" class="contenu-modale">
+                        <h3 class="black">Ajouter un commentaire pour l'auteur {{ item.id_author }}</h3>
+                        <!-- Conteneur où les commentaires seront affichés -->
+                        <div class="commentaires-liste"></div>
+                        <textarea name="commentaire" class="black" id="texte-commentaire" placeholder="Écrivez votre commentaire ici..."></textarea>
+                        <button class="comment" type="button" id="envoyer-commentaire">Envoyer</button> <!-- Bouton d'envoi -->
+                    </form>
+                    
+                    
+                </div>
+
+                <img id="image-auteur" class="livre" 
+                    src="{{ url_for('get_photoOeuvres', id=item.id_author) }}" 
+                    data-id="{{ item.id_author }}" >
+
+                <figcaption class="text" >{{ item.name }}</figcaption>
+            </figure>
+        {% endfor %}
+        
+       
+    </main>
+
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+<script type="text/javascript">
+    // Vérifie si currentUserId est correctement défini
+    console.log("Current User ID:", {{ id|tojson }});
+
+    const currentUserId = {{ id|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/oeuvre.js') }}"></script>
+</body>
+</html>

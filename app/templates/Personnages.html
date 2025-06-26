@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    
+    <meta charset ="utf 8">
+    <title>Personnages</title>
+    <link class="icon" rel="icon" href="static/dophinicone.png" type="image/png">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/personnages.css')}}">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+    
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body background="static/photo/arrière personnage.jpeg" >
+
+    <header>
+        <!-- En-tête de la page -->
+        <div class="entête">
+            <h1>Personnages</h1>
+            <div class="user-info">
+
+                <p>Nom: {{ username }}</p> 
+                <p>Groupe: {{ groupe }}</p>
+            </div>
+        </div>
+        
+
+        <nav>
+            <ul>
+                <li><a class="text" href="{{ url_for('Home') }}">Accueil</a></li>
+                <li><a class="text" href="{{ url_for('Oeuvres') }}">Oeuvres</a></li>
+            </ul>
+            <button class="déco" onclick="window.location.href='{{ url_for('déconnexion') }}'">Déconnexion</button>
+        
+        </nav>
+        
+    </header>
+
+    <!-- Section principale -->
+     
+    <main class="container">
+        {% for item in items %}
+            <figure class="figure-personnage">
+                
+
+                <div class="dropdown">
+                    <!-- Input checkbox caché pour chaque menu -->
+                    <input type="checkbox" id="menu-toggle-{{ loop.index }}" class="menu-toggle" />
+                
+                    <!-- Label lié au checkbox, clic sur l'image pour ouvrir/fermer -->
+                    <label for="menu-toggle-{{ loop.index }}">
+                        <img class="icon" src="{{ url_for('static', filename='photo/bandes.png') }}" alt="Menu">
+                    </label>
+                
+                    <!-- Menu déroulant -->
+                    <ul class="dropdown-menu">
+                        {% if session['groupe'] == 'Admin' %}
+                        <li><a href="javascript:void(0);" class="supprimer-auteur" data-id="{{ item.id_author }}">Supprimer</a></li>
+                        <li><a href="#">Modifier</a></li>
+                        {% endif %}
+                        <li><a href="#" class="ouvrir-fenetre-commentaire" data-id="{{ item.id_author }}">Commenter</a></li>
+                    </ul>
+                </div>
+                <!-- Fenêtre modale pour le commentaire (cachée par défaut) -->
+                <div id="fenetre-commentaire-{{ item.id_author }}" class="fenetre-modale">
+                    <form action="{{ url_for('charger_commentaire_audio', id=item.id_author) }}" method="POST" enctype="multipart/form-data" class="contenu-modale">
+                        <h3 class="black" >Ajouter un commentaire pour l'auteur {{ item.id_author }} </h3> <!-- Titre -->
+                        <div class="commentaires-liste"></div>
+                        <textarea name="commentaire" class="black" id="texte-commentaire" placeholder="Écrivez votre commentaire ici..."></textarea>
+                        <button class="comment" type="submit" id="envoyer-commentaire">Envoyer</button> <!-- Bouton d'envoi -->
+                    </form>
+                    
+                </div>
+
+                
+                
+
+                <img class="effigie" src="{{ url_for('get_photo', id=item.id_author) }}">
+                <figcaption class="text" >{{ item.name }} {{ item.birth }}-{{ item.dead }}</figcaption>
+                <audio controls>
+                    <source src="{{ url_for('get_audio', id=item.id_author) }}" type="audio/mpeg">
+                    Votre navigateur ne supporte pas la lecture de ce fichier audio.
+                </audio>
+            </figure>
+        {% endfor %}
+
+        
+    </main>
+
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+
+    <script type="text/javascript">
+        // Vérifie si currentUserId est correctement défini
+        console.log("Current User ID:", {{ id|tojson }});
+
+        const currentUserId = {{ id|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/personnages.js') }}"></script>
+
+    </body>
+</html>

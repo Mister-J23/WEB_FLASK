@@ -1,0 +1,566 @@
+body {
+    /* width: 1792px; /* Largeur fixe */
+    /* height: 1024px; /* Hauteur fixe */
+    margin: 0 auto; /* Centre horizontalement */
+    /* background-color: #f0f0f0; Couleur de fond pour visualiser la taille */
+    background-size: 100% 100%; /* 200% de la taille de la page */
+    background-position: center; /* Centrer l'image */
+    background-repeat: no-repeat; /* Pas de répétition de l'image */
+    background-attachment: fixed; /* L'image reste fixe pendant le défilement de la page */
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+    margin: 0;
+    overflow: hidden; /* Empêche le défilement de la page */
+
+}
+
+nav ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajuste selon le nombre d'éléments */
+    grid-template-rows: repeat(2, auto); /* Deux lignes */
+    gap: 1px; /* Espacement entre les éléments */
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav li {
+    margin: 0;  /* Supprime les marges autour des éléments de la liste */
+    padding: 0;  /* Supprime l'espace intérieur des éléments de la liste */
+    font-size: 30px;
+}
+
+
+
+/* Fixe le header en haut */
+header {
+    position: fixed; /* Fixe le header par rapport à la fenêtre, il restera visible même en scrollant */
+    top: 0; /* Positionne le header en haut de la page */
+    left: 0; /* Positionne le header tout à gauche de la page */
+    width: 100%; /* Le header prend toute la largeur de la page */
+    z-index: 1000; /* Définit l'ordre de superposition du header par rapport aux autres éléments. Plus le nombre est élevé, plus l'élément sera au-dessus des autres */
+
+}
+
+.entête{
+    display: flex;
+    
+    flex-direction: row; /* Aligne les éléments horizontalement */
+    justify-content: center;
+    align-items: center;
+    
+  
+
+    border-bottom-right-radius:20%;
+    border-bottom-left-radius:20%;
+    background: linear-gradient(360deg, rgba(24, 48, 94, 0.8), rgba(255, 255, 255, 0.5)); /* Dégradé */
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce */
+    width: 100vw;
+}
+
+/***********************************************DESIGN DU PIED DE PAGE**********************************************/
+footer {
+    background-color: #333; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    text-align: center; /* Centrer le contenu */
+    padding: 5px 0; /* Espacement intérieur */
+    width: 100%; /* Largeur complète */
+    z-index: 1000; /* Au-dessus des autres éléments */
+}
+
+footer p {
+    display: inline-block; /* Garde le texte en place sans l'étirer */
+    margin: 0; /* Évite les marges par défaut */
+}
+
+/***********************************MENU DEROULANT**********************************************************/
+/* Style de base pour chaque menu déroulant */
+.dropdown {
+    position: absolute; /* Positionnement absolu par rapport au parent */
+    bottom: 80%; /* Décale le menu à 10px du bas */
+    left: 7px; /* Décale le menu à 10px de la gauche */
+    display: flex; /* Utilisation de flex pour centrer l'élément à l'intérieur du conteneur si nécessaire */
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre le contenu verticalement */
+}
+
+/* Masque le menu par défaut */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 150%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 100px;
+    width: fit-content;
+    border-radius: 10%;
+}
+
+/* Style pour chaque élément du menu */
+.dropdown-menu li {
+    padding: 8px 16px;
+    width: fit-content;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: min-content;
+}
+
+/* Affiche le menu déroulant lorsqu'on coche le checkbox */
+.menu-toggle:checked ~ .dropdown-menu {
+    display: block;
+}
+
+/* Cacher les checkboxes */
+.menu-toggle {
+    display: none;
+}
+
+
+
+.supprimer-auteur:hover {
+    color: darkred; /* Un effet de survol pour le lien */
+}
+
+
+/* -------------Fenêtre modale pour écrire un commentaire ------------------------------------------------------------------------------------- */
+/* La fenêtre modale est cachée par défaut */
+.fenetre-modale {
+    display: none; /* Cachée au chargement de la page */
+    position: fixed; /* Reste en place même en scrollant */
+    z-index: 1000; /* Au-dessus des autres éléments */
+    left: 0;
+    top: 0;
+    width: 100%; /* Prend toute la largeur de l'écran */
+    height: 100%; /* Prend toute la hauteur */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour l'effet pop-up */
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre verticalement */
+}
+
+/* Contenu de la fenêtre modale */
+.contenu-modale {
+    background-color: white; /* Fond blanc */
+    padding: 20px;
+    width: 50%; /* Taille relative à l'écran */
+    max-width: 400px; /* Ne dépasse pas 400px */
+    height: 60%;
+    border-radius: 8px; /* Coins arrondis */
+    text-align: center;
+    align-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour un effet pop-up */
+}
+
+/* Bouton de fermeture "X" */
+.fermer {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Zone de texte */
+textarea {
+    width: 100%; /* Prend toute la largeur du conteneur */
+    height: 10%; /* Hauteur fixe */
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc; /* Bordure grise */
+    border-radius: 5px;
+    resize: none; /* Empêche l'utilisateur de redimensionner */
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur totale */
+}
+
+
+/* Bouton d'envoi */
+.comment {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #007bff; /* Bleu */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Effet au survol */
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Classe qui sera ajoutée par JavaScript pour afficher la fenêtre */
+.fenetre-active {
+    display: flex !important; /* Affiche la fenêtre uniquement si cette classe est ajoutée */
+}
+
+/* Afficher les commentau=ires*/
+.commentaires-liste {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    height: 50%;
+    overflow-y: auto;
+    color: black;
+}
+
+.commentaire-item {
+    display: flex;
+    justify-content: space-between; /* Espacement entre les colonnes */
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Style des colonnes */
+.commentaire-text {
+    flex: 2; /* Plus d'espace pour le commentaire */
+    overflow-wrap: break-word; /* Permet de couper le texte s'il est trop long */
+    color: gray;
+}
+
+.commentaire-date {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: gray;
+}
+
+.commentaire-user {
+    flex: 1;
+    text-align: right;
+    font-weight: bold;
+    color: gray;
+}
+
+.delete-comment{
+    width: 2vw; /* 30% de la largeur de la fenêtre */
+    height: 2vw; /* 50% de la hauteur de la fenêtre */
+    cursor: pointer;  /* Assure-toi que le curseur change pour montrer que c'est cliquable */
+    pointer-events: auto;  /* Assure-toi que les événements de souris sont activés */
+
+}
+
+
+
+.Chargement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Centre les éléments horizontalement */
+    width: 100vw; /* Prend toute la largeur disponible */
+    max-width: 600px; /* Limite la largeur pour un bon rendu */
+    margin: 20px auto; /* Centre les blocs et ajoute de l'espace entre eux */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background: linear-gradient(360deg, rgba(24, 48, 94, 0.8), rgba(255, 255, 255, 0.5)); /* Dégradé */
+}
+
+
+
+
+.form-labels {
+    display: flex;
+    flex-direction: column;
+    padding-top: auto;
+    font-weight: bold;
+    gap: 15px; /* Espacement entre les champs */
+    width: auto; /* Facultatif : Ajuste la largeur du conteneur */
+    height: auto; /* Facultatif : Ajuste la hauteur du conteneur */
+}
+.form-inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px; /* Espacement entre les champs */
+    width: auto; /* Facultatif : Ajuste la largeur du conteneur */
+    max-width: 30vw;
+    height: auto; /* Facultatif : Ajuste la hauteur du conteneur */
+    font-size: 10px;
+
+}
+
+
+
+.text { /* Appliquer à tous les éléments texte */
+    color: white; /* Couleur du texte principale */
+    text-shadow: 
+        -1px -1px 0 black, /* Ombre en haut à gauche */
+         1px -1px 0 black, /* Ombre en haut à droite */
+        -1px  1px 0 black, /* Ombre en bas à gauche */
+         1px  1px 0 black; /* Ombre en bas à droite */
+}
+
+* {
+    color: white;
+}
+.déco{
+    margin-top: 5px;
+    color:black
+}
+
+figure {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Si besoin d'un empilement vertical */
+    margin: 10px; /* Espacement */
+    width: auto;
+    height: auto;
+    min-width: 200px;
+    min-height: 155px;
+    border-radius: 20%;
+}
+
+figure .text{
+    display: flex;
+    justify-content: center; /* Centre les éléments horizontalement */
+    align-items: center; /* Centre les éléments verticalement */
+}
+
+.titre-chargement{
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.container {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* Pour espacer les éléments */
+    flex-wrap: wrap; /* Permet d'adapter l'affichage sur les petits écrans */
+    row-gap:  5vw; /* Définit un espace minimum de 20px entre les éléments */
+    column-gap: 10vw;
+    flex-grow: 1;
+    /* Le main doit défiler indépendamment */
+    margin-top: 200px; /* Ajuste selon la hauteur du header */
+    margin-bottom: 0px; /* Ajuste selon la hauteur du footer */
+    overflow-y: auto; /* Active le défilement */
+}
+
+.utilisateur{
+    margin-top: 300px; /* Ajuste selon la hauteur du header */
+    margin-bottom: 50px; /* Ajuste selon la hauteur du footer */
+    
+    
+}
+.connexion{
+    width: 50vw; /* 30% de la largeur de la fenêtre */
+    height: 50vw; /* 50% de la hauteur de la fenêtre */
+
+}
+
+.effigie {
+    display: block; /* Nécessaire pour appliquer margin auto */
+    margin: 0 auto; /* Centre horizontalement */
+    width: 10vw;
+    height: 10vw;
+    object-fit: cover;
+    border-radius: 20%;
+    min-width: 100px;
+    min-height: 100px;
+}
+.livre {
+    display: block; /* Nécessaire pour appliquer margin auto */
+    margin: 0 auto; /* Centre horizontalement */
+    width: 10vw;
+    height: 10vw;
+    object-fit: cover;
+    object-fit: cover;
+    min-width: 180px;
+    min-height: 180px;
+}
+
+figure audio {
+    min-width: auto;
+    min-height: auto;
+    max-width: 200px; /* 30% de la largeur de la fenêtre */
+    max-height: 200px; /* 50% de la hauteur de la fenêtre */
+
+}
+.icon{
+    width: 2vw; /* 30% de la largeur de la fenêtre */
+    height: 2vw; /* 50% de la hauteur de la fenêtre */
+}
+
+
+
+.black{
+    color: black;
+}
+footer img{ 
+    width: 2vw; /*  */
+    height: 2vw;
+    border-radius:50%;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+
+.header {
+    display: flex;
+}
+
+.entête {
+    position: relative; /* Nécessaire pour positionner .user-info */
+    display: flex;
+    justify-content: center; /* Centre le <h1> sur toute la largeur */
+    align-items: center; /* Centre verticalement */
+    padding: 10px 20px;
+}
+
+.entête h1 {
+    font-size: clamp(1.5rem, 5vw, 3rem); /* Texte responsive */
+    margin: 0;
+}
+
+.user-info {
+    position: absolute;
+    right: 45px; /* La colle à droite */
+    top: 50%;
+    transform: translateY(-50%); /* Centre verticalement */
+    text-align: left;
+    white-space: nowrap; /* Empêche le retour à la ligne */
+    text-decoration: underline;
+}
+
+/* Effet au survol */
+button:hover {
+    background-color: #0056b3;
+}
+
+/*--------------------------------------------------------------------TABLEAU------------------------------------------------------------------------ */
+/* Conteneur principal du tableau */
+.tableau {
+    width: 60vw; /* Largeur relative à l'écran */
+    max-height: 100vh; /* Hauteur max pour éviter le débordement */
+    height: auto;
+    background-color: darkgreen; /* Fond vert foncé */
+    border: 7px solid burlywood; /* Bordure marron clair */
+
+    /* Gestion des débordements uniquement en hauteur */
+    overflow-y: auto; /* Active le scroll vertical si nécessaire */
+    overflow-x: hidden; /* Désactive le scroll horizontal */
+
+    /* Alignement */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligner le tableau en haut */
+}
+
+/* Conteneur scrollable du tableau */
+.tableau-container {
+    width: 100vw; /* Prend toute la largeur de .tableau */
+    overflow-y: auto; /* Active le défilement vertical si nécessaire */
+}
+
+/* Styles pour le tableau */
+table {
+    width: 100vw; /* Prend toute la largeur du conteneur */
+    border-collapse: collapse; /* Supprime l’espace entre les bordures */
+    table-layout: fixed; /* Assure une largeur uniforme des colonnes */
+}
+
+
+/* Styles pour les cellules */
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* Style des titres */
+th {
+    background: rgb(1, 38, 1);
+    color: white;
+    text-align: center;
+}
+
+
+/* Définition des largeurs pour chaque colonne */
+th:nth-child(1), td:nth-child(1) { width: 30%; }  /* Colonne Nom */
+th:nth-child(2), td:nth-child(2) { width: 20%; }  /* Colonne Password */
+th:nth-child(3), td:nth-child(3) { width: 30%; }  /* Colonne Groupe */
+th:nth-child(4), td:nth-child(4) { width: 20%; 
+
+    font-size: 10px;
+    margin: 0;
+    text-align: center;
+    padding: 0;
+}  /* Colonne supprimer */
+
+.bouton-supprimer{
+    width: 30px; /* 30% de la largeur de la fenêtre */
+    height: 30px; /* 50% de la hauteur de la fenêtre */
+    cursor: pointer;
+
+}
+
+.fenetreUtilisateur {
+    display: none;
+    flex-direction: column;
+    align-items: center;  /* Centre les éléments horizontalement */
+    width: 100vw; /* Prend toute la largeur disponible */
+    max-width: 600px; /* Limite la largeur pour un bon rendu */
+    margin: 20px auto; /* Centre les blocs et ajoute de l'espace entre eux */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background: linear-gradient(360deg, rgba(24, 48, 94, 0.8), rgba(255, 255, 255, 0.5)); /* Dégradé */
+}
+
+.fenetre-activeUtilisateur {
+    display: flex !important; /* Affiche la fenêtre */
+}
+
+
+.conteneurform{   
+    display: flex;
+    justify-content: center;
+    width: auto; /* Facultatif : Ajuste la largeur du conteneur */
+    height: auto; /* Facultatif : Ajuste la hauteur du conteneur */
+}
+
+/**************************************************************************************** Style général du select */
+select.black {
+    background-color: #005596; /* Fond noir */
+    color: white; /* Texte blanc */
+    border: 1px solid #555; /* Bordure grise */
+    padding: 2px;
+    border-radius: 5px;
+    font-size: 14px; /* Taille de la police */
+    cursor: pointer;
+}
+
+/* Style au survol */
+select.black:hover {
+    background-color: #83d3e3; /* Légèrement plus clair */
+}
+
+/* Style quand le select est en focus (cliqué) */
+select.black:focus {
+    outline: none;
+    border-color: #00aaff; /* Bordure bleue */
+}
+
+/* Style des options */
+select.black option {
+    background-color: #1e1e1e; /* Fond noir */
+    color: white; /* Texte blanc */
+}
+
+/* Changer la couleur de l'option sélectionnée */
+select.black option:checked {
+    background-color: #00aaff; /* Bleu */
+    color: white;
+}
+

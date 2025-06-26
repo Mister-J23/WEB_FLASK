@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset ="utf 8">
+
+    
+    <title>Contact</title>
+    <link rel="icon" href="static/photo/dauphin.png" type="image/png">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+    
+    <style>
+        .all{
+            text-align: center;
+        }
+        .image{
+
+            border-radius: 25%;
+        }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="all" background="static/photo/univers.jpeg">
+
+    <header >
+        <!-- En-tête de la page -->
+        <div class="entête">
+            <h1>Page contact</h1>
+            <div class="user-info">
+                <p>Nom: {{ username }}</p> 
+                <p>Groupe: {{ groupe }}</p>
+            </div>
+        </div>
+
+            <p>
+                <a class="text" href="{{ url_for('Home') }}">Accueil</a>
+
+            </p>
+            
+        
+    </header>
+
+    <!-- Section principale -->
+     
+    <main class="container">
+        <img class="image" src = "static/photo/photo de moi.jpg" weight = "200"height = "260" >
+        <p class="text">Tel: +33 xx xx xx xx xx</p>
+        <p class="text">email: mister-J23@gmail.com</p>
+        
+    </main>
+
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

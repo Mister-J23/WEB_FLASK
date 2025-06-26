@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    
+    <title>Philorama</title>
+    <link rel="icon" href="static/dophinicone.png" type="image/png">
+
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body background="static/photo/home.jpeg">
+    <header> 
+        <!-- En-tête de la page -->
+        <div class="entête">
+            <h1> Philorama </h1>
+            <div class="user-info">
+                <p>Nom: {{ username }}</p> 
+                <p>Groupe: {{ groupe }}</p>
+            </div>
+        </div>
+        
+      
+        <nav>
+            <ul>
+                <li><a class="text" href="{{ url_for('personnages') }}">Personnages</a></li>
+                <li><a class="text" href="{{ url_for('Oeuvres') }}">Oeuvres</a></li>
+                <!-- Condition pour afficher "Enregistrement et Utilisateur" uniquement si l'utilisateur est Admin -->
+                {% if session['groupe'] == 'Admin' %}
+                <li><a class="text" href="{{ url_for('Page_chargement') }}">Enregistrement</a></li>
+                <li><a class="text" href="{{ url_for('Utilisateur') }}">Utilisateurs</a></li>
+                {% endif %}
+                <li><a class="text" href="{{ url_for('Contact') }}">Contact</a></li>
+            </ul>
+            <button class="déco" onclick="window.location.href='{{ url_for('déconnexion') }}'">Déconnexion</button>
+        
+        </nav>
+
+    </header>
+
+    <!-- Section principale -->
+     
+    <main class="container">
+        <section>
+            <h2 class="text">À propos de nous</h2>
+            
+        </section>
+    </main>
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+    
+
+    
+
+</body>
+
+</html>

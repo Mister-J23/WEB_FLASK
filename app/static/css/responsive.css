@@ -1,0 +1,169 @@
+
+@media screen and (max-width: 780px) { /*Mediaquary*/
+    body {
+        margin: 0;
+        background-size: cover; /* L'image couvre toute la zone sans distorsion */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* L'image reste fixe lors du scroll */
+        height: 100vh; /* Prend toute la hauteur de l'écran */
+        flex-direction: column;
+        align-items: center;
+        overflow-y: hidden;
+    }
+
+
+    main{
+        height: 100vh
+    }
+
+ 
+    
+    
+
+    .connexion{
+
+        width: 100vw; /* 30% de la largeur de la fenêtre */
+        height: 50vw; /* 50% de la hauteur de la fenêtre */
+    
+    }
+    .white{
+        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Ombre */
+
+    }
+    .formconnexion{
+        width: 100%;
+    }
+
+    
+    
+    
+    
+    .nomdusite{
+            
+        text-align: center; /* Centre le texte horizontalement */
+        margin-top: 0;
+        margin-bottom:40px ; /* Supprime les marges par défaut */
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 80px;
+        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Ombre */
+    }
+        /* Fixe le header en haut */
+    header {
+        position: fixed; /* Fixe le header par rapport à la fenêtre, il restera visible même en scrollant */
+        top: 0; /* Positionne le header en haut de la page */
+        left: 0; /* Positionne le header tout à gauche de la page */
+        width: 100%; /* Le header prend toute la largeur de la page */
+        z-index: 1000; /* Définit l'ordre de superposition du header par rapport aux autres éléments. Plus le nombre est élevé, plus l'élément sera au-dessus des autres */
+
+    }
+
+    .entête{
+        display: flex;
+        
+        flex-direction: row; /* Aligne les éléments horizontalement */
+        justify-content: center;
+        align-items: center;
+        
+      
+    
+        border-bottom-right-radius:20%;
+        border-bottom-left-radius:20%;
+        background: linear-gradient(360deg, rgba(24, 48, 94, 0.8), rgba(255, 255, 255, 0.5)); /* Dégradé */
+    
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce */
+    }
+
+    
+
+    .container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap; /* Permet d'adapter l'affichage sur les petits écrans */
+        row-gap:  5vw; /* Définit un espace minimum de 20px entre les éléments */
+        column-gap: 10vw;
+        flex-grow: 1;
+        /* Le main doit défiler indépendamment */
+        margin-top: 155px; /* Ajuste selon la hauteur du header */
+        margin-bottom: 0px; /* Ajuste selon la hauteur du footer */
+        overflow-y: auto; /* Active le défilement */
+        height: calc(100vh - 239px)
+    }
+
+    .utilisateur{
+        margin-top: 155px; /* Ajuste selon la hauteur du header */
+        margin-bottom: 0px; /* Ajuste selon la hauteur du footer */
+        
+    }
+   
+
+    .user-info p {
+
+        font-size: 12px; /* Taille de la police réduite */
+    }
+
+    .text { /* Appliquer à tous les éléments texte */
+        color: white; /* Couleur du texte principale */
+        text-shadow: 
+            -1px -1px 0 black, /* Ombre en haut à gauche */
+             1px -1px 0 black, /* Ombre en haut à droite */
+            -1px  1px 0 black, /* Ombre en bas à gauche */
+             1px  1px 0 black; /* Ombre en bas à droite */
+        font-size: 14px; /* Taille de la police réduite */
+    }
+
+    .icon{
+        width: 16px; /*  */
+        height: 16px; /*  */
+    }
+
+   
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: -300%;
+        left: 150%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background-color: #fff;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        min-width: 160px;
+    }
+
+    /*--------------------------------------------------------------------TABLEAU------------------------------------------------------------------------ */
+/* Conteneur principal du tableau */
+.tableau {
+    width: 95vw; /* Largeur relative à l'écran */
+    max-height: 100vh;
+    background-color: darkgreen; /* Fond vert foncé */
+    border: 7px solid burlywood; /* Bordure marron clair */
+
+    /* Gestion des débordements uniquement en hauteur */
+    overflow-y: auto; /* Active le scroll vertical si nécessaire */
+    overflow-x: hidden; /* Désactive le scroll horizontal */
+
+    /* Alignement */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligner le tableau en haut */
+}
+
+
+    
+footer {
+    background-color: #333; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    text-align: center; /* Centrer le contenu */
+    padding: 5px 0; /* Espacement intérieur */
+    width: 100%; /* Largeur complète */
+    z-index: 100; /* Au-dessus des autres éléments */
+}
+
+footer p {
+    display: inline-block; /* Garde le texte en place sans l'étirer */
+    margin: 0; /* Évite les marges par défaut */
+}
+}
+

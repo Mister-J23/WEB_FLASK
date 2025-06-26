@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset ="utf 8">
+    <title>Connexion</title>
+    <link rel="icon" href="static/photo/arrière personnage.jpeg" type="image/png">
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}"> 
+    <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+</head>
+<body background="static/photo/chateau.jpeg">
+    <h1 class="nomdusite"> Philorama </h1>
+    <div class="Connexion">
+        <h2 class="white">Connexion</h2>
+        <form class="formconnexion" action="{{ url_for('login') }}" method="POST">
+            <input  class="black" type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input  class="black" type="password" name="password" placeholder="Mot de passe" required>
+            <button class="black"  type="submit">Se connecter</button>
+        </form>
+        <p class="white">{{message}}</p>
+    </div>
+    <!-- Section principale -->
+     <main class="utilisateur">
+
+     </main>
+    
+
+    <!-- Pied de page -->
+    <footer >
+        <p>&copy; <img class="foot" src="static/photo/dauphin.png" > 2025 Philorama. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>
