@@ -4,9 +4,13 @@
     
     <meta charset ="utf 8">
     <title>Personnages</title>
+    <!-- Définition de l'icône de l'onglet du navigateur -->
     <link class="icon" rel="icon" href="static/dophinicone.png" type="image/png">
+    <!-- Chargement de la feuille de style principale pour l'ensemble du site -->
     <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/style2.css')}}">
+    <!-- Feuille de style spécifique à la page des personnages -->
     <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/personnages.css')}}">
+    <!-- Feuille de style pour adapter l'affichage aux petits écrans (responsive design) -->
     <link rel ="stylesheet" href ="{{ url_for ('static', filename='css/responsive.css')}}">
     
 
@@ -58,6 +62,7 @@
                     <!-- Menu déroulant -->
                     <ul class="dropdown-menu">
                         {% if session['groupe'] == 'Admin' %}
+                        <!-- Affichage des boutons de suppression et de modification si l'utilisateur est Admin -->
                         <li><a href="javascript:void(0);" class="supprimer-auteur" data-id="{{ item.id_author }}">Supprimer</a></li>
                         <li><a href="#">Modifier</a></li>
                         {% endif %}

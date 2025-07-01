@@ -4,6 +4,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from app import app, db
 from werkzeug.security import check_password_hash
 from functools import wraps
+import os
+from dotenv import load_dotenv
+PEPPER = os.getenv('PEPPER')
 
 
 def login_required(f):#Nécessite une connexion
@@ -24,35 +27,45 @@ def login_required_Admin(f):  # Nécessite une connexion
     return decorated_function_Admin
 
 
-#Objet utilisateur
+# ========================= CLASSE DE GESTION DE L'AUTHENTIFICATION =========================
+
 class Connexion:
     def __init__(self, session_db):
-        self.session_db = session_db  # Ici on stocke la session DB dans l'attribut self.session_db
+        # Initialisation avec une session SQLAlchemy (base de données)
+        self.session_db = session_db  # Elle est stockée comme attribut pour réutilisation dans les méthodes
 
     def obtenir_utilisateur(self, nom_utilisateur):
-        # Utilisation de la session DB pour récupérer les données
+        # Exécute une requête SQL pour récupérer les infos d'un utilisateur via son nom
         resultat = self.session_db.execute(
-            text("SELECT * FROM users WHERE name = :username"),
+            text("SELECT * FROM users WHERE name = :username"),  # Requête paramétrée
             {'username': nom_utilisateur}
-        ).fetchone()
+        ).fetchone()  # Récupère une seule ligne (l'utilisateur)
         return resultat
 
     def verifier_mot_de_passe(self, mot_de_passe_stocke, mot_de_passe_saisi):
-        # Vérification du mot de passe
-        return check_password_hash(mot_de_passe_stocke, mot_de_passe_saisi)
+        mot_de_passe_saisi_avec_poivre = mot_de_passe_saisi + PEPPER
+        return check_password_hash(mot_de_passe_stocke, mot_de_passe_saisi_avec_poivre)
 
     def se_connecter(self, nom_utilisateur, mot_de_passe):
-        # Utilisation de la méthode obtenir_utilisateur pour vérifier l'utilisateur
+        # Tente de connecter l'utilisateur
         utilisateur = self.obtenir_utilisateur(nom_utilisateur)
+
+        # Si un utilisateur est trouvé et que le mot de passe est correct
         if utilisateur and self.verifier_mot_de_passe(utilisateur.password, mot_de_passe):
-            session['id']=utilisateur.id_user
+            # Stocke les infos dans la session pour une utilisation dans tout le site
+            session['id'] = utilisateur.id_user
             session['username'] = utilisateur.name
             session['groupe'] = utilisateur._group
-            return True
+            return True  # Connexion réussie
+
+        # Sinon, retour d’un échec de connexion
         return False
+
+# Instanciation de l’objet `user`, avec la session SQLAlchemy comme argument
 user = Connexion(db.session)
 
-#
+
+#======================== CLASSE d'acquisition des médias ===================
 class Media:
     def __init__(self, session_db):
         self.session_db = session_db  # Ici on stocke la session DB dans l'attribut self.session_db
@@ -125,6 +138,7 @@ class Media:
 
 media = Media(db.session)
 
+#============================CLASSE d'insertion dans la base=========================
 class Allimentation:
     def __init__(self, session_db):
         self.session_db = session_db  # Ici on stocke la session DB dans l'attribut self.session_db
@@ -218,6 +232,7 @@ class Allimentation:
 
 insert = Allimentation(db.session)
 
+#============================ CLASSE d'acquisition des données de la base ===============
 class Acquisition:
     def __init__(self, session_db):
         self.session_db = session_db  # Ici on stocke la session DB dans l'attribut self.session_db
@@ -306,7 +321,7 @@ class Acquisition:
 
         
 acquis = Acquisition(db.session)
-
+#============================= CLASSE update de la base ==========
 class Modification:
     def __init__(self, session_db):
         self.session_db = session_db  # Ici on stocke la session DB dans l'attribut self.session_db

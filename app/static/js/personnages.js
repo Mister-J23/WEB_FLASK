@@ -1,123 +1,110 @@
-//------------------------------------------------------------------------------------------PAGE PERSONNAGES-----------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// FICHIER : personnages.js
+// Description : Gère les interactions utilisateurs de la page Personnages
+//------------------------------------------------------------------------------------------
 
-// Ajoute un écouteur d'événements pour détecter les clics sur toute la page
+// Fonction d'échappement pour éviter les attaques XSS
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, function (tag) {
+        const chars = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return chars[tag] || tag;
+    });
+}
+
+//--------------------------------------------- FERMETURE DES MENUS DÉROULANTS -----------------------------------------------
 document.addEventListener('click', function(event) {
-    // Vérifie si l'élément cliqué est à l'intérieur d'un menu déroulant ou d'un bouton checkbox du menu
     const isClickInsideMenu = event.target.closest('.dropdown') || event.target.closest('.menu-toggle');
-
-    // Si l'utilisateur clique en dehors des menus déroulants
     if (!isClickInsideMenu) {
-        // Sélectionne toutes les cases à cocher utilisées pour afficher les menus déroulants
         const checkboxes = document.querySelectorAll('.menu-toggle');
-
-        // Parcourt toutes les checkboxes et les décoche
         checkboxes.forEach(checkbox => {
-            checkbox.checked = false; // Décoche le menu déroulant
+            checkbox.checked = false; // Ferme les menus si clic en dehors
         });
     }
 });
 
-
-//------------------------------------------------------------BOUTON OUVERTURE FENETRE COMMENTAIRE-------------------------------------------
+//------------------------------------------------------------ OUVERTURE FENÊTRE COMMENTAIRE ------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
     let boutonsOuvrir = document.querySelectorAll(".ouvrir-fenetre-commentaire");
 
     boutonsOuvrir.forEach(bouton => {
         bouton.addEventListener("click", function (event) {
-            event.preventDefault(); // Empêche le rechargement de la page
-            
-            let authorId = bouton.getAttribute("data-id"); // Récupère l'ID de l'auteur
-            let fenetre = document.getElementById("fenetre-commentaire-" + authorId); // Sélectionne la fenêtre modale
+            event.preventDefault();
+            let authorId = bouton.getAttribute("data-id");
+            let fenetre = document.getElementById("fenetre-commentaire-" + authorId);
+            if (!fenetre) return;
 
-            if (!fenetre) {
-                console.error("Fenêtre modale introuvable pour l'auteur ID:", authorId);
-                return;
-            }
-
-            // Affiche la fenêtre modale
-            fenetre.classList.add("fenetre-active");
+            fenetre.classList.add("fenetre-active"); // Affiche la fenêtre modale
 
             let commentContainer = fenetre.querySelector(".commentaires-liste");
+            if (!commentContainer) return;
 
-            if (!commentContainer) {
-                console.error("Conteneur des commentaires introuvable !");
-                return;
-            }
-
-            // Envoie une requête AJAX pour charger les commentaires
+            // Récupération des commentaires depuis le serveur (AJAX)
             fetch(`/envoyer_commentaires_audio/${authorId}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.error) {
-                        console.error("Erreur :", data.error);
-                        return;
-                    }
+                    if (data.error) return;
 
-                    console.log("Commentaires reçus :", data.commentaires);
+                    commentContainer.innerHTML = ""; // Nettoie l'affichage
 
-                    // Efface les anciens commentaires
-                    commentContainer.innerHTML = "";
-
-                    // Ajoute les nouveaux commentaires reçus
+                    // Ajout des commentaires un par un
                     data.commentaires.forEach(commentaire => {
                         let commentHTML = `
                             <div class="commentaire-item" data-id="${commentaire.id_comment}">
-                                <span class="commentaire-text">${commentaire.comment}</span>
-                                <span class="commentaire-date">${commentaire.date_comment}</span>
-                                <span class="commentaire-user">${commentaire.id_user}</span>
+                                <span class="commentaire-text">${escapeHTML(commentaire.comment)}</span>
+                                <span class="commentaire-date">${escapeHTML(commentaire.date_comment)}</span>
+                                <span class="commentaire-user">${escapeHTML(commentaire.id_user)}</span>
                                 <img class="delete-comment" src="/static/photo/croix.png" alt="Supprimer" title="Supprimer">
                             </div>`;
                         commentContainer.innerHTML += commentHTML;
                     });
 
-                    // AJOUT DE L'ÉCOUTEUR APRÈS LE CHARGEMENT
-                    ajouterEcouteurSuppression(commentContainer);
+                    ajouterEcouteurSuppression(commentContainer); // Ajoute la suppression
                 })
-                .catch(error => console.error("Erreur lors du chargement des commentaires :", error));
+                .catch(error => console.error("Erreur AJAX :", error));
         });
     });
 
-    // Fonction pour ajouter l'écouteur d'événement uniquement après le chargement des commentaires
+    // Fonction pour supprimer un commentaire
     function ajouterEcouteurSuppression(commentContainer) {
         commentContainer.addEventListener('click', function (event) {
             if (event.target && event.target.classList.contains('delete-comment')) {
                 let commentElement = event.target.closest('.commentaire-item');
                 let commentId = commentElement.getAttribute('data-id');
-                let userId = currentUserId;  
-
-                let requestBody = JSON.stringify({ id_user: currentUserId });
-
-                console.log(`Requête DELETE envoyée avec l'ID du commentaire: ${commentId} et l'ID utilisateur: ${userId}`);
+                let userId = currentUserId;  // Variable définie dans le template HTML
 
                 fetch(`/supprimer_commentaire/${commentId}/${userId}`, {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: requestBody
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_user: userId })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message.includes("✅")) {
-                        commentElement.remove();  
+                        commentElement.remove();
                     } else {
                         alert("Erreur : " + data.message);
                     }
                 })
-                .catch(error => console.error("Erreur lors de la suppression :", error));
+                .catch(error => console.error("Erreur suppression:", error));
             }
         });
     }
 
-    // Fermer la fenêtre modale
-    document.querySelectorAll(".fermer").forEach(boutonFermer => {
-        boutonFermer.addEventListener("click", function () {
-            let fenetre = boutonFermer.closest(".fenetre-modale");
+    // Fermeture de la modale via le bouton "fermer"
+    document.querySelectorAll(".fermer").forEach(btn => {
+        btn.addEventListener("click", function () {
+            let fenetre = btn.closest(".fenetre-modale");
             fenetre.classList.remove("fenetre-active");
         });
     });
 
-    // Fermer en cliquant à l'extérieur
+    // Fermeture de la modale via clic à l'extérieur
     window.addEventListener("click", function (event) {
         document.querySelectorAll(".fenetre-modale").forEach(fenetre => {
             if (event.target === fenetre) {
@@ -125,44 +112,32 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
-
-
-
 });
- //======================================================SUPPRIMER AUTEUR========================================
+
+//-------------------------------------------- SUPPRESSION D'AUTEUR ---------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
     let boutonsSupprimer = document.querySelectorAll(".supprimer-auteur");
-    console.log("Boutons détectés :", boutonsSupprimer.length); // Vérifier combien de boutons sont trouvés
-
 
     boutonsSupprimer.forEach(bouton => {
         bouton.addEventListener("click", function (event) {
-            event.preventDefault(); // Empêche le rechargement de la page
-
-            let authorId = bouton.getAttribute("data-id"); // Récupère l'ID de l'auteur
-            authorId = parseInt(authorId, 10);  // Force l'ID à être un entier
-            console.log("Bouton cliqué")
-
+            event.preventDefault();
+            let authorId = parseInt(bouton.getAttribute("data-id"), 10);
 
             if (confirm("Voulez-vous vraiment supprimer cet auteur ?")) {
                 fetch(`/supprimer_auteur/${authorId}`, {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" }//Spécifier que la réponse est du JSON
+                    headers: { "Content-Type": "application/json" }
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Réponse du serveur :", data); // Vérifie la réponse du serveur
                     if (data.message.includes("✅")) {
                         window.location.href = "/Personnage";
                     } else {
                         alert("Erreur : " + data.error);
                     }
                 })
-                .catch(error => console.error("Erreur lors de la suppression :", error));
+                .catch(error => console.error("Erreur suppression auteur:", error));
             }
-
         });
     });
 });
-

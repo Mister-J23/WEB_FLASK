@@ -4,26 +4,35 @@ from app import app, db
 from app.requete import login_required, login_required_Admin, media, user, insert, acquis, supp
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+import os
+from dotenv import load_dotenv
+PEPPER = os.getenv('PEPPER')
 
 
 
 
 
-#Login
+# ===================== AUTHENTIFICATION & SESSION ======================
+
+# Route de connexion (authentification)
 @app.route('/login', methods=['POST'])
 def login():
+    # Récupération des données saisies dans le formulaire HTML
     username = request.form.get('username')
     password = request.form.get('password')
 
+    # Vérification des identifiants via une fonction externe (fichier requete.py)
     lien = user.se_connecter(username, password)
+
+    # Si les identifiants sont corrects, rediriger vers la page d'accueil
     if lien :
-        return redirect(url_for('Home'))  # Rediriger vers la page d'accueil
+        return redirect(url_for('Home'))
+
+    # Sinon, réafficher le formulaire avec un message d'erreur
     return render_template('connexion.html', message="Identifiants incorrects")
 
-
-
-
-
+# Permet d’injecter automatiquement certaines variables (id, username, groupe)
+# dans tous les templates HTML, sans avoir à les passer manuellement dans chaque render_template()
 @app.context_processor
 def inject_user():
     return dict(
@@ -32,37 +41,42 @@ def inject_user():
         groupe=session.get('groupe')
     )
 
-
+# Page de connexion (page d'accueil par défaut)
 @app.route('/')
 def Connexion():
     return render_template('connexion.html')
 
-
+# Route de déconnexion
 @app.route('/Déconnexion')
 def déconnexion():
-
-    # Supprimer la session
+    # Supprimer toutes les variables de session (id, username, etc.)
     session.clear()
     print(session)
-    return redirect(url_for('Connexion'))  # Redirection vers la page de connexion  
-    
+    # Rediriger vers la page de connexion
+    return redirect(url_for('Connexion'))
 
-@app.route('/Home') # decorators
+
+# ====================== PAGES PROTÉGÉES PAR LOGIN ======================
+
+# Page d’accueil après connexion (protégée par le décorateur @login_required)
+@app.route('/Home')
 @login_required
 def Home():
     return render_template('Home.html')
 
-
-
+# Page affichant la liste des personnages (autrement dit les auteurs)
 @app.route('/Personnage')
 @login_required
 def personnages():
-    # Récupérer tout le contenu de la table des auteurs
+    # Appel à une fonction du module media pour récupérer les auteurs
     all_items = media.obtenir_personnages()
+
+    # Si des éléments ont été récupérés, les passer au template HTML
     if all_items:
         return render_template('Personnages.html', items=all_items)
     else:
         return "Erreur lors de la récupération des auteurs"
+
 
     
 
@@ -444,7 +458,7 @@ def charger_utilisateur():
     if request.method == 'POST':
         # Récupérer les données du formulaire
         nom = request.form['nom']
-        motpasse = request.form['motpasse']
+        motpasse = request.form['motpasse'] + PEPPER
         groupe = request.form['groupe']
 
         motpassehache = generate_password_hash(motpasse)

@@ -151,8 +151,8 @@ footer p {
 /* Contenu de la fenêtre modale */
 .contenu-modale {
     background-color: white; /* Fond blanc */
-    padding: 20px;
-    width: 50%; /* Taille relative à l'écran */
+    padding: 10px;
+    width: 70%; /* Taille relative à l'écran */
     max-width: 400px; /* Ne dépasse pas 400px */
     height: 60%;
     border-radius: 8px; /* Coins arrondis */
@@ -218,7 +218,7 @@ button:hover {
     align-items: center;
     padding: 8px;
     border-bottom: 1px solid #ddd;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 /* Style des colonnes */
@@ -231,7 +231,7 @@ button:hover {
 .commentaire-date {
     flex: 1;
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
     color: gray;
 }
 

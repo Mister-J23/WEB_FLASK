@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 # Charger les variables d'environnement
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path)
+PEPPER = os.getenv('PEPPER')
+
 
 app = Flask(__name__)
 
