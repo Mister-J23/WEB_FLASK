@@ -216,11 +216,11 @@ class Allimentation:
             print(f"❌ Erreur SQL : {str(e)}")
             return None
         
-    def inserer_utilisateur(self, name, password, group):
+    def inserer_utilisateur(self, name, password, groupe):
         try:
             resultat = db.session.execute(
                     text("INSERT INTO users (name, password, _group) VALUES (:V1, :V2, :V3)"),
-                    {'V1': name, 'V2': password, 'V3': group}
+                    {'V1': name, 'V2': password, 'V3': groupe}
                 )
             print("Insertion réussie !")
             return resultat.rowcount # Retourne True
